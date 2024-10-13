@@ -1,0 +1,20 @@
+#htmlCode {
+    max-height: 200px;
+    display: none;
+}
+#preview {
+    min-height: 100px;
+}
+#colorPicker {
+    max-height: 2000px;
+    z-index: 10;
+}
+@media (max-width: 768px) {
+    .toolbar-button {
+        padding: 0.5rem;
+        font-size: 0.875rem;
+    }
+    #editor, #preview {
+        min-height: 150px;
+    }
+}
