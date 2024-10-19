@@ -27,15 +27,34 @@
                 <button onclick="applyStyle('bold')" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="粗體">粗體</button>
                 <button onclick="applyStyle('italic')" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="斜體">斜體</button>
                 <button onclick="applyStyle('underline')" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="底線">底線</button>
-                <div class="relative">
-                    <button onclick="toggleColorPicker()" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="顏色">顏色</button>
+                <div class="relative flex flex-wrap gap-2">
+                    <button onclick="toggleColorPicker()" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="顏色">顏色 ▼</button>
                     <div id="colorPicker" class="absolute right-0 top-full mt-1 bg-white border rounded p-2 z-10 translate-x-5 hidden"></div>
+                    <button onclick="toggleListOptions()" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="列表">列表 ▼</button>
+                    <div id="listOptions" class="absolute right-0 top-full mt-1 bg-white dark:bg-gray-800 border rounded p-2 z-10 hidden">
+                        <button onclick="applyListStyle('bullet')" class="block w-full text-left px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">符號列表</button>
+                        <button onclick="applyListStyle('number')" class="block w-full text-left px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">數字列表</button>
+                    </div>
                 </div>
-                <button onclick="applyStyle('size')" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="字體大小">大小</button>
-                <button onclick="applyStyle('list')" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="列表">列表</button>
-                <button onclick="applyStyle('alignLeft')" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="靠左對齊">靠左對齊</button>
-                <button onclick="applyStyle('alignCenter')" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="置中">置中</button>
-                <button onclick="applyStyle('alignRight')" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="靠右對齊">靠右對齊</button>
+                <div class="relative flex flex-wrap gap-2">
+                    <button onclick="toggleSizeOptions()" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="字體大小">大小 ▼</button>
+                    <div id="sizeOptions" class="absolute right-0 top-full mt-1 bg-white dark:bg-gray-800 border rounded p-2 z-10 hidden">
+                        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                            <button onclick="applySize('10px')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">極小 (10px)</button>
+                            <button onclick="applySize('12px')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">特小 (12px)</button>
+                            <button onclick="applySize('16px')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">小 (16px)</button>
+                            <button onclick="applySize('18px')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">中 (18px)</button>
+                        </div>
+                    </div>
+                    <button onclick="togglePositionOptions()" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="位置">位置 ▼</button>
+                    <div id="positionOptions" class="absolute right-0 top-full mt-1 bg-white dark:bg-gray-800 border rounded p-2 z-10 hidden">
+                        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                            <button onclick="applyStyle('alignLeft')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">靠左對齊</button>
+                            <button onclick="applyStyle('alignCenter')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">置中</button>
+                            <button onclick="applyStyle('alignRight')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">靠右對齊</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <textarea id="editor" class="w-full h-32 p-2 border rounded resize-none mb-4 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="在這裡輸入您的商品描述..."></textarea>
             <div class="mb-4">
