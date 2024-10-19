@@ -50,8 +50,9 @@ function applyStyle(style) {
             startTag = '[size=16px]'; endTag = '[/size]';
             break;
         case 'list':
-            startTag = '\n[*] ';
-            break;
+            // Handle list separately
+            applyListStyle();
+            return;
         case 'alignLeft':
             startTag = '[align=left]'; endTag = '[/align]';
             break;
@@ -66,8 +67,104 @@ function applyStyle(style) {
     updatePreview();
 }
 
+function applyListStyle() {
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    const fullText = editor.value;
+    
+    // If there's no selection, work with the current line
+    if (start === end) {
+        const lineStart = fullText.lastIndexOf('\n', start - 1) + 1;
+        const lineEnd = fullText.indexOf('\n', start);
+        const currentLine = fullText.substring(lineStart, lineEnd !== -1 ? lineEnd : fullText.length);
+        
+        const newLine = currentLine.startsWith('[*] ') ? currentLine.substring(4) : `[*] ${currentLine}`;
+        
+        editor.value = fullText.substring(0, lineStart) + newLine + fullText.substring(lineEnd !== -1 ? lineEnd : fullText.length);
+        editor.selectionStart = editor.selectionEnd = lineStart + newLine.length;
+    } else {
+        // If there's a selection, toggle list for all selected lines
+        const selectedText = fullText.substring(start, end);
+        const lines = selectedText.split('\n');
+        
+        const isAlreadyList = lines.every(line => line.trim().startsWith('[*] ') || line.trim() === '');
+        
+        const newText = lines.map(line => {
+            if (isAlreadyList) {
+                return line.trim().startsWith('[*] ') ? line.substring(4) : line;
+            } else {
+                return line.trim() ? `[*] ${line.trim()}` : line;
+            }
+        }).join('\n');
+        
+        editor.value = fullText.substring(0, start) + newText + fullText.substring(end);
+        editor.selectionStart = start;
+        editor.selectionEnd = start + newText.length;
+    }
+    
+    updatePreview();
+}
+
 function toggleColorPicker() {
+    const colorPicker = document.getElementById('colorPicker');
     colorPicker.classList.toggle('hidden');
+}
+
+// 點擊其他地方時關閉顏色下拉菜單
+document.addEventListener('click', function(event) {
+    const colorPicker = document.getElementById('colorPicker');
+    const colorButton = document.querySelector('button[title="顏色"]');
+    if (!colorButton.contains(event.target) && !colorPicker.contains(event.target)) {
+        colorPicker.classList.add('hidden');
+    }
+});
+
+function toggleListOptions() {
+    const listOptions = document.getElementById('listOptions');
+    listOptions.classList.toggle('hidden');
+}
+
+// 點擊其他地方時關閉列表下拉菜單
+document.addEventListener('click', function(event) {
+    const listOptions = document.getElementById('listOptions');
+    const listButton = document.querySelector('button[title="列表"]');
+    if (!listButton.contains(event.target) && !listOptions.contains(event.target)) {
+        listOptions.classList.add('hidden');
+    }
+});
+
+function toggleSizeOptions() {
+    const sizeOptions = document.getElementById('sizeOptions');
+    sizeOptions.classList.toggle('hidden');
+}
+
+// 點擊其他地方時關閉大小下拉菜單
+document.addEventListener('click', function(event) {
+    const sizeOptions = document.getElementById('sizeOptions');
+    const sizeButton = document.querySelector('button[title="字體大小"]');
+    if (!sizeButton.contains(event.target) && !sizeOptions.contains(event.target)) {
+        sizeOptions.classList.add('hidden');
+    }
+});
+
+function togglePositionOptions() {
+    const positionOptions = document.getElementById('positionOptions');
+    positionOptions.classList.toggle('hidden');
+}
+
+// 點擊其他地方時關閉位置下拉菜單
+document.addEventListener('click', function(event) {
+    const positionOptions = document.getElementById('positionOptions');
+    const positionButton = document.querySelector('button[title="位置"]');
+    if (!positionButton.contains(event.target) && !positionOptions.contains(event.target)) {
+        positionOptions.classList.add('hidden');
+    }
+});
+
+function applySize(size) {
+    surroundSelectedText(editor, `[size=${size}]`, '[/size]');
+    updatePreview();
+    document.getElementById('sizeOptions').classList.add('hidden');
 }
 
 function applyColor(color) {
@@ -94,6 +191,84 @@ function surroundSelectedText(input, startTag, endTag) {
     }
 
     input.focus();
+}
+
+function applyListStyle(listType) {
+    const fullText = editor.value;
+    let start = editor.selectionStart;
+    let end = editor.selectionEnd;
+    
+    // 如果沒有選擇文本，擴展到整個列表
+    if (start === end) {
+        start = findListStart(fullText, start);
+        end = findListEnd(fullText, end);
+    }
+    
+    const selectedText = fullText.substring(start, end);
+    const lines = selectedText.split('\n');
+    
+    const listPrefix = listType === 'number' ? /^\d+\.\s/ : /^\[[\*•]\]\s/;
+    const isAlreadyList = lines.some(line => listPrefix.test(line.trim()));
+    
+    let counter = 1;
+    const newText = lines.map(line => {
+        const trimmedLine = line.trim();
+        if (isAlreadyList) {
+            // 移除列表格式
+            return trimmedLine.replace(listPrefix, '');
+        } else {
+            // 添加列表格式
+            if (trimmedLine) {
+                if (listType === 'number') {
+                    return `${counter++}. ${trimmedLine}`;
+                } else {
+                    return `[*] ${trimmedLine}`;
+                }
+            }
+            return trimmedLine;
+        }
+    }).join('\n');
+    
+    editor.value = fullText.substring(0, start) + newText + fullText.substring(end);
+    editor.selectionStart = start;
+    editor.selectionEnd = start + newText.length;
+    
+    updatePreview();
+    toggleListOptions(); // 隱藏列表選項
+}
+
+function findListStart(text, position) {
+    let start = position;
+    while (start > 0) {
+        start = text.lastIndexOf('\n', start - 1);
+        if (start === -1) {
+            start = 0;
+            break;
+        }
+        const line = text.substring(start + 1, text.indexOf('\n', start + 1)).trim();
+        if (!(/^\d+\.\s/.test(line) || /^\[[\*•]\]\s/.test(line)) && line !== '') {
+            start = text.indexOf('\n', start + 1) + 1;
+            break;
+        }
+    }
+    return start;
+}
+
+function findListEnd(text, position) {
+    let end = position;
+    while (end < text.length) {
+        end = text.indexOf('\n', end);
+        if (end === -1) {
+            end = text.length;
+            break;
+        }
+        const line = text.substring(end + 1, text.indexOf('\n', end + 1) !== -1 ? text.indexOf('\n', end + 1) : text.length).trim();
+        if (!(/^\d+\.\s/.test(line) || /^\[[\*•]\]\s/.test(line)) && line !== '') {
+            break;
+        }
+        end++;
+    }
+    return end;
 }
 
 function updatePreview() {
