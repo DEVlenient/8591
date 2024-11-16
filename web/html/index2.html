@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8591 商品內容編輯器(電腦版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
+    <div class="container mx-auto p-4 h-screen">
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex flex-col sm:flex-row sm:justify-between items-center gap-4">
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white text-center">
+                    8591 商品內容編輯器(電腦版)
+                </h1>
+                <a href="index.html" class="w-full sm:w-auto px-4 py-2 text-sm font-semibold text-center rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300" onclick="return confirmSwitch();">
+                    切換手機版
+                </a>
+            </div>
+            <div class="flex gap-2">
+                <button id="darkModeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300" title="切換深色模式">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800 dark:text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 h-[calc(100vh-8rem)]">
+            <!-- 左側編輯面板 -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 flex flex-col">
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <button onclick="applyStyle('bold')" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="粗體">粗體</button>
+                    <button onclick="applyStyle('italic')" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="斜體">斜體</button>
+                    <button onclick="applyStyle('underline')" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="底線">底線</button>
+                    <div class="relative flex flex-wrap gap-2">
+                        <button onclick="toggleColorPicker()" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="顏色">顏色 ▼</button>
+                        <div id="colorPicker" class="absolute right-0 top-full mt-1 bg-white border rounded p-2 z-10 translate-x-5 hidden"></div>
+                        <button onclick="toggleListOptions()" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="列表">列表 ▼</button>
+                        <div id="listOptions" class="absolute right-0 top-full mt-1 bg-white dark:bg-gray-800 border rounded p-2 z-10 hidden">
+                            <button onclick="applyListStyle('bullet')" class="block w-full text-left px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">符號列表</button>
+                            <button onclick="applyListStyle('number')" class="block w-full text-left px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">數字列表</button>
+                        </div>
+                    </div>
+                    <div class="relative flex flex-wrap gap-2">
+                        <button onclick="toggleSizeOptions()" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="字體大小">大小 ▼</button>
+                        <div id="sizeOptions" class="absolute right-0 top-full mt-1 bg-white dark:bg-gray-800 border rounded p-2 z-10 hidden">
+                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                <button onclick="applySize('10px')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">極小 (10px)</button>
+                                <button onclick="applySize('12px')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">特小 (12px)</button>
+                                <button onclick="applySize('16px')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">小 (16px)</button>
+                                <button onclick="applySize('18px')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">中 (18px)</button>
+                            </div>
+                        </div>
+                        <button onclick="togglePositionOptions()" class="p-2 border rounded hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-white" title="位置">位置 ▼</button>
+                        <div id="positionOptions" class="absolute right-0 top-full mt-1 bg-white dark:bg-gray-800 border rounded p-2 z-10 hidden">
+                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                <button onclick="applyStyle('alignLeft')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">靠左對齊</button>
+                                <button onclick="applyStyle('alignCenter')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">置中</button>
+                                <button onclick="applyStyle('alignRight')" class="block w-full text-left px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white" role="menuitem">靠右對齊</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <textarea id="editor" class="flex-1 w-full p-4 border rounded resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-300" placeholder="在這裡輸入您的商品描述..."></textarea>
+            </div>
+
+            <!-- 右側預覽面板 -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 flex flex-col">
+                <h2 class="text-xl font-semibold p-2 mb-3 text-gray-900 dark:text-white">預覽</h2>
+                <div id="preview" class="flex-1 overflow-auto p-4 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"></div>
+                <div id="htmlView" class="flex-1 overflow-auto p-4 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white hidden">
+                    <pre id="htmlCode" class="whitespace-pre-wrap"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+</html>
