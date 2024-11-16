@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>8591 商品內容編輯器</title>
+    <title>8591 商品內容編輯器(手機版)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -16,7 +16,14 @@
     <div class="max-w-4xl mx-auto p-4">
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
             <div class="flex justify-between items-center mb-4">
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">8591 商品內容編輯器</h1>
+                <div class="flex flex-col sm:flex-row sm:justify-between items-center gap-4">
+                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white text-center">
+                        8591 商品內容編輯器(手機版)
+                    </h1>
+                    <a href="index2.html" class="w-full sm:w-auto px-4 py-2 text-sm font-semibold text-center rounded-lg bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300" onclick="return confirmSwitch();">
+                        切換電腦版
+                    </a>
+                </div>
                 <button id="darkModeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300" title="切換深色模式">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800 dark:text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
@@ -56,17 +63,13 @@
                     </div>
                 </div>
             </div>
-            <textarea id="editor" class="w-full h-32 p-2 border rounded resize-none mb-4 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="在這裡輸入您的商品描述..."></textarea>
+            <textarea id="editor" class="w-full h-64 p-4 border rounded resize-none mb-4 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="在這裡輸入您的商品描述..."></textarea>
             <div class="mb-4">
-                <div class="flex justify-between items-center mb-2">
-                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">HTML 代碼：</h2>
-                    <button id="toggleHtml" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">展開</button>
+                <h2 class="text-xl font-semibold p-2 mb-3 text-gray-900 dark:text-white">預覽</h2>
+                <div id="preview" class="flex-1 overflow-auto p-4 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"></div>
+                <div id="htmlView" class="flex-1 overflow-auto p-4 border rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white hidden">
+                    <pre id="htmlCode" class="whitespace-pre-wrap"></pre>
                 </div>
-                <pre id="htmlCode" class="border p-4 rounded bg-gray-50 dark:bg-gray-700 overflow-x-auto whitespace-pre-wrap text-gray-900 dark:text-white"></pre>
-            </div>
-            <div class="mb-4">
-                <h2 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">預覽：</h2>
-                <div id="preview" class="border p-4 rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"></div>
             </div>
         </div>
     </div>
