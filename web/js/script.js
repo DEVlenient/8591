@@ -1,7 +1,6 @@
 const editor = document.getElementById('editor');
 const htmlCode = document.getElementById('htmlCode');
 const preview = document.getElementById('preview');
-const toggleHtml = document.getElementById('toggleHtml');
 const darkModeToggle = document.getElementById('darkModeToggle');
 const colorPicker = document.getElementById('colorPicker');
 
@@ -50,7 +49,7 @@ function applyStyle(style) {
             startTag = '[size=16px]'; endTag = '[/size]';
             break;
         case 'list':
-            // Handle list separately
+            // 單獨處理列表
             applyListStyle();
             return;
         case 'alignLeft':
@@ -295,18 +294,12 @@ function updatePreview() {
     preview.innerHTML = htmlContent;
 }
 
+function confirmSwitch() {
+    return confirm("切換不會保留內容，確定要切換嗎？");
+}
+
 editor.addEventListener('input', updatePreview);
 updatePreview();
-
-toggleHtml.addEventListener('click', () => {
-    if (htmlCode.style.display === 'none') {
-        htmlCode.style.display = 'block';
-        toggleHtml.textContent = '收起';
-    } else {
-        htmlCode.style.display = 'none';
-        toggleHtml.textContent = '展開';
-    }
-});
 
 darkModeToggle.addEventListener('click', () => {
     document.documentElement.classList.toggle('dark');
